@@ -5,11 +5,16 @@ const path = require("path");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// .env 또는 Render 환경변수에서 읽어옴
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_KEY
-);
+// Render 환경변수에서 읽어옴
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_KEY;
+
+if (!supabaseUrl || !supabaseKey) {
+  console.error("❌ SUPABASE_URL 또는 SUPABASE_KEY 환경변수가 없습니다.");
+  process.exit(1);
+}
+
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
